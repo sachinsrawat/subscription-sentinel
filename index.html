@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f6f0">
+    <meta name="description" content="Subscription Sentinel helps you manage subscriptions, monitor recurring expenses, and track upcoming payments.">
+
+    <title>Subscription Sentinel — Manage Your Subscriptions</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="app-shell">
+
+        <aside class="sidebar" id="sidebar">
+            <a href="#" class="brand" aria-label="Subscription Sentinel home">
+                <span class="brand-icon">S</span>
+                <span class="brand-name">sentinel<span>.</span></span>
+            </a>
+
+            <div class="sidebar-label">WORKSPACE</div>
+
+            <nav class="navigation" aria-label="Main navigation">
+                <a href="#overview" class="nav-link active">
+                    <span class="nav-icon">▦</span>
+                    <span>Overview</span>
+                </a>
+
+                <a href="#subscriptions" class="nav-link">
+                    <span class="nav-icon">◷</span>
+                    <span>Subscriptions</span>
+                </a>
+
+                <a href="#spending" class="nav-link">
+                    <span class="nav-icon">▤</span>
+                    <span>Spending insights</span>
+                </a>
+
+                <a href="#upcoming" class="nav-link">
+                    <span class="nav-icon">◉</span>
+                    <span>Upcoming payments</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-tip">
+                    <div class="tip-icon">✳</div>
+                    <h3>Spend with intention.</h3>
+                    <p>Small recurring payments can add up. Keep an eye on where your money goes.</p>
+                </div>
+
+                <div class="sidebar-footer">
+                    <span class="footer-dot"></span>
+                    <span>Your data stays in this browser</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content" id="overview">
+
+            <header class="topbar">
+                <button class="mobile-menu" id="mobileMenu" aria-label="Toggle navigation">
+                    ☰
+                </button>
+
+                <div class="breadcrumb">
+                    Workspace <span>/</span> <strong>Overview</strong>
+                </div>
+
+                <div class="topbar-actions">
+                    <div class="today-label" id="todayLabel"></div>
+
+                    <button class="theme-button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                        ◐
+                    </button>
+
+                    <button class="avatar" id="profileButton" aria-label="Profile information" title="About this dashboard">
+                        S
+                    </button>
+                </div>
+            </header>
+
+            <section class="welcome-section">
+                <div>
+                    <div class="eyebrow">
+                        <span class="eyebrow-dot"></span>
+                        YOUR MONEY, IN PERSPECTIVE
+                    </div>
+
+                    <h1>Subscription<br class="mobile-break"> overview<span>.</span></h1>
+
+                    <p class="welcome-description">
+                        A clearer picture of your recurring expenses starts here.
+                    </p>
+                </div>
+
+                <button class="primary-button" id="addSubscriptionButton">
+                    <span>＋</span> Add subscription
+                </button>
+            </section>
+
+            <section class="stats-grid" aria-label="Financial overview">
+
+                <article class="stat-card spending-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Monthly spending</span>
+                        <span class="stat-icon green-icon">₹</span>
+                    </div>
+
+                    <div class="stat-value" id="monthlySpending">₹0</div>
+
+                    <div class="stat-bottom">
+                        <span class="status-pill green-pill">MONTHLY</span>
+                        <span class="stat-note">Estimated recurring cost</span>
+                    </div>
+
+                    <div class="stat-decoration decoration-green"></div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Active subscriptions</span>
+                        <span class="stat-icon neutral-icon">◷</span>
+                    </div>
+
+                    <div class="stat-value" id="activeCount">0</div>
+
+                    <div class="stat-bottom">
+                        <span class="status-pill neutral-pill">TRACKING</span>
+                        <span class="stat-note">Currently active</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Annual projection</span>
+                        <span class="stat-icon orange-icon">↗</span>
+                    </div>
+
+                    <div class="stat-value" id="annualSpending">₹0</div>
+
+                    <div class="stat-bottom">
+                        <span class="status-pill orange-pill">12 MONTHS</span>
+                        <span class="stat-note">Based on monthly spending</span>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Next payment</span>
+                        <span class="stat-icon blue-icon">⌁</span>
+                    </div>
+
+                    <div class="stat-value stat-date-value" id="nextPaymentValue">—</div>
+
+                    <div class="stat-bottom">
+                        <span class="status-pill blue-pill" id="nextPaymentBadge">NO PAYMENTS</span>
+                        <span class="stat-note" id="nextPaymentName">Nothing scheduled</span>
+                    </div>
+                </article>
+
+            </section>
+
+            <section class="content-grid">
+
+                <article class="panel subscriptions-panel" id="subscriptions">
+                    <div class="panel-header">
+                        <div>
+                            <div class="section-kicker">YOUR RECURRING BILLS</div>
+                            <h2>My subscriptions</h2>
+                            <p class="panel-description">Manage everything in one place.</p>
+                        </div>
+
+                        <button class="text-button" id="viewAllButton">View all ↗</button>
+                    </div>
+
+                    <div class="table-controls">
+                        <label class="search-box">
+                            <span>⌕</span>
+                            <input type="search" id="searchInput" placeholder="Search subscriptions..." aria-label="Search subscriptions">
+                        </label>
+
+                        <select id="categoryFilter" class="filter-select" aria-label="Filter by category">
+                            <option value="all">All categories</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Music">Music</option>
+                            <option value="Productivity">Productivity</option>
+                            <option value="Education">Education</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>SUBSCRIPTION</th>
+                                    <th>CATEGORY</th>
+                                    <th>BILLING</th>
+                                    <th>NEXT PAYMENT</th>
+                                    <th>AMOUNT</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="subscriptionTableBody"></tbody>
+                        </table>
+
+                        <div class="empty-state" id="emptyState">
+                            <div class="empty-illustration">＋</div>
+                            <h3>No subscriptions yet</h3>
+                            <p>Add your first subscription to start tracking recurring expenses.</p>
+                            <button class="primary-button small-button" id="emptyAddButton">
+                                Add your first subscription
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-footer">
+                        <span id="tableCount">Showing 0 subscriptions</span>
+                        <span>Amounts in Indian rupees</span>
+                    </div>
+                </article>
+
+                <div class="right-column">
+
+                    <article class="panel insights-panel" id="spending">
+                        <div class="panel-header">
+                            <div>
+                                <div class="section-kicker">WHERE IT GOES</div>
+                                <h2>Spending breakdown</h2>
+                            </div>
+
+                            <span class="small-badge">MONTHLY</span>
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="spendingChart" aria-label="Monthly spending by category" role="img"></canvas>
+
+                            <div class="chart-center">
+                                <span>Total per month</span>
+                                <strong id="chartTotal">₹0</strong>
+                            </div>
+                        </div>
+
+                        <div class="chart-legend" id="chartLegend">
+                            <div class="chart-empty">Add subscriptions to see your breakdown.</div>
+                        </div>
+                    </article>
+
+                    <article class="panel upcoming-panel" id="upcoming">
+                        <div class="panel-header">
+                            <div>
+                                <div class="section-kicker">DON'T MISS A BILL</div>
+                                <h2>Coming up</h2>
+                            </div>
+
+                            <span class="calendar-icon">▦</span>
+                        </div>
+
+                        <div class="upcoming-list" id="upcomingList"></div>
+
+                        <div class="upcoming-footer">
+                            <span class="upcoming-footer-dot"></span>
+                            <span>Upcoming payments, in date order</span>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <footer class="app-footer">
+                <div class="footer-brand">
+                    <span class="footer-brand-icon">S</span>
+                    <span>Subscription Sentinel</span>
+                </div>
+
+                <span>Built for better spending habits.</span>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Add / Edit Subscription Modal -->
+    <div class="modal-overlay" id="subscriptionModal" aria-hidden="true">
+        <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+            <div class="modal-header">
+                <div>
+                    <div class="section-kicker">SUBSCRIPTION DETAILS</div>
+                    <h2 id="modalTitle">Add subscription</h2>
+                    <p>Keep your recurring expenses organized.</p>
+                </div>
+
+                <button class="modal-close" id="closeModalButton" aria-label="Close dialog">
+                    ×
+                </button>
+            </div>
+
+            <form id="subscriptionForm">
+                <input type="hidden" id="subscriptionId">
+
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="subscriptionName">Subscription name *</label>
+                        <input type="text" id="subscriptionName" maxlength="60" placeholder="e.g. Netflix, Spotify" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subscriptionAmount">Amount (₹) *</label>
+                        <input type="number" id="subscriptionAmount" min="0.01" max="100000000" step="0.01" placeholder="499" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subscriptionCategory">Category *</label>
+                        <select id="subscriptionCategory" required>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Music">Music</option>
+                            <option value="Productivity">Productivity</option>
+                            <option value="Education">Education</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billingCycle">Billing cycle *</label>
+                        <select id="billingCycle" required>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
+                            <option value="Weekly">Weekly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nextPaymentDate">Next payment date *</label>
+                        <input type="date" id="nextPaymentDate" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="subscriptionNotes">Notes <span class="optional-label">OPTIONAL</span></label>
+                        <textarea id="subscriptionNotes" maxlength="250" rows="3" placeholder="Any useful details about this subscription..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-error" id="formError" role="alert"></div>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancelModalButton">Cancel</button>
+                    <button type="submit" class="primary-button" id="saveSubscriptionButton">Save subscription</button>
+                </div>
+            </form>
+
+        </section>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+</body>
+</html>
